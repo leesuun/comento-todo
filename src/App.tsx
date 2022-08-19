@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Clock from "react-live-clock";
 
 const Wrapper = styled.div`
   display: flex;
@@ -95,7 +96,6 @@ const Item = styled.li``;
 const Contents2 = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 30px;
 `;
@@ -141,7 +141,9 @@ function App() {
           <Section style={{ backgroundColor: "#8588dd" }}>
             <Contents>
               <AddFeatures>
-                <Time>17:06:20</Time>
+                <Time>
+                  <Clock format={"HH:mm:ss"} ticking={true} />
+                </Time>
                 <Icon>🌙</Icon>
               </AddFeatures>
               <Weather>
@@ -156,14 +158,9 @@ function App() {
                   <StateBtn>done</StateBtn>
                 </ToDoSelect>
                 <List>
-                  <Item>오늘 할일11111111111111111111</Item>
-                  <Item>오늘 할일1111111111</Item>
-                  <Item>오늘 할일111111111111111111</Item>
-                  <Item>오늘 할일111111111111111111</Item>
-                  <Item>오늘 할일111111111111111111</Item>
-                  <Item>오늘 할일111111111111111111</Item>
-                  <Item>오늘 할일111111111111111111</Item>
-                  <Item>오늘 할일111111111111111111</Item>
+                  {[1, 2, 3, 4, 5, 6].map((v, idx) => (
+                    <Item key={idx}>오늘 할일111111111111111111</Item>
+                  ))}
                 </List>
               </TodayTodo>
             </Contents>
@@ -172,17 +169,17 @@ function App() {
             <Contents2>
               <Date>JULY 2022</Date>
               <WeekList>
-                <WeekItem>MON</WeekItem>
-                <WeekItem>TUE</WeekItem>
-                <WeekItem>WED</WeekItem>
-                <WeekItem>THU</WeekItem>
-                <WeekItem>FRI</WeekItem>
-                <WeekItem>SUN</WeekItem>
-                <WeekItem>SAT</WeekItem>
+                {["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"].map(
+                  (v, idx) => (
+                    <WeekItem key={idx}>{v}</WeekItem>
+                  )
+                )}
               </WeekList>
               <hr style={{ width: "100%" }} />
               <Days>
-                {arr.map((v, idx) => v.map((v2, idx) => <Day>{v2}</Day>))}
+                {arr.map((v, idx) =>
+                  v.map((v2, idx) => <Day key={idx}>{v2}</Day>)
+                )}
               </Days>
             </Contents2>
           </Section>

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
-import { LightTheme } from "./theme";
+import { DarkTheme, LightTheme } from "./theme";
 import App from "./App";
 
 const root = ReactDOM.createRoot(
