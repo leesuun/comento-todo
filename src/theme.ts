@@ -4,7 +4,7 @@ export const DarkTheme: DefaultTheme = {
   SectionColor_R: "#545353",
   SectionColor_L: "#000",
   BasicColor: "#8588DD",
-  textColor: "#000",
+  textColor: "#fff",
 };
 
 export const LightTheme: DefaultTheme = {

@@ -1,5 +1,63 @@
 import styled from "styled-components";
 import Clock from "react-live-clock";
+import { useRecoilState } from "recoil";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { DarkTheme, LightTheme } from "./theme";
+import { themeAtom } from "./atom";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+const GlobalStyle = createGlobalStyle`
+  html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  b, u, i, center,
+  dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend,
+  table, caption, tbody, tfoot, thead, tr, th, td,
+  article, aside, canvas, details, embed, 
+  figure, figcaption, footer, header, hgroup, 
+  menu, nav, output, ruby, section, summary,
+  time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+  /* HTML5 display-role reset for older browsers */
+  article, aside, details, figcaption, figure, 
+  footer, header, hgroup, menu, nav, section {
+    display:block;
+
+  }
+  body {
+    line-height: 1;
+    color: ${(props) => props.theme.textColor}
+
+  }
+  ol, ul {
+    list-style: none;
+
+  }
+  blockquote, q {
+    quotes: none;
+
+  }
+  blockquote:before, blockquote:after,
+  q:before, q:after {
+    content: '';
+    content: none;
+  }
+  table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  }
+
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -10,7 +68,7 @@ const Wrapper = styled.div`
   padding: 15px;
 `;
 const Header = styled.header`
-  border: 5px solid red;
+  color: black;
 `;
 const Title = styled.h2`
   font-size: 36px;
@@ -23,8 +81,14 @@ const Main = styled.main`
   width: 1000px;
   max-height: 700px;
 `;
-const Section = styled.section`
+const Section_L = styled.section`
   padding: 10px;
+  background-color: ${(props) => props.theme.SectionColor_L};
+`;
+
+const Section_R = styled.section`
+  padding: 10px;
+  background-color: ${(props) => props.theme.SectionColor_R};
 `;
 
 const Contents = styled.div`
@@ -43,6 +107,7 @@ const AddFeatures = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
 `;
 const Time = styled.time`
   font-size: 20px;
@@ -124,6 +189,8 @@ const Day = styled.div`
 `;
 
 function App() {
+  const [isDark, setIsDark] = useRecoilState(themeAtom);
+
   const arr = [
     [1, 2, 3, 4, 5, 6, 7],
     [8, 9, 10, 11, 12, 13, 14],
@@ -132,61 +199,76 @@ function App() {
     [29, 30, 31, 1, 2, 3, 4],
     [5, 6, 7, 8, 9, 10, 11],
   ];
+
+  const onDarkMode = () => setIsDark((prev) => !prev);
+  console.log(isDark);
+
   return (
     <>
-      <Wrapper>
-        <Header>
-          <Title>TO-DO</Title>
-        </Header>
-        <Main>
-          <Section style={{ backgroundColor: "#8588dd" }}>
-            <Contents>
-              <AddFeatures>
-                <Time>
-                  <Clock format={"HH:mm:ss"} ticking={true} />
-                </Time>
-                <Icon>🌙</Icon>
-              </AddFeatures>
-              <Weather>
-                <WeatherImg />
-                <Temp>13C</Temp>
-                <WeatherState>partly-cloudy-night</WeatherState>
-              </Weather>
-              <TodayTodo>
-                <ToDoSelect>
-                  <StateBtn>todo</StateBtn>
-                  <StateBtn>doing</StateBtn>
-                  <StateBtn>done</StateBtn>
-                </ToDoSelect>
-                <List>
-                  {[1, 2, 3, 4, 5, 6].map((v, idx) => (
-                    <Item key={idx}>오늘 할일111111111111111111</Item>
-                  ))}
-                </List>
-              </TodayTodo>
-            </Contents>
-          </Section>
-          <Section>
-            <Contents2>
-              <Date>JULY 2022</Date>
-              <WeekList>
-                {["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"].map(
-                  (v, idx) => (
-                    <WeekItem key={idx}>{v}</WeekItem>
-                  )
-                )}
-              </WeekList>
-              <hr style={{ width: "100%" }} />
-              <Days>
-                {arr.map((v, idx) =>
-                  v.map((v2, idx) => <Day key={idx}>{v2}</Day>)
-                )}
-              </Days>
-            </Contents2>
-          </Section>
-        </Main>
-      </Wrapper>
-      <Footer>footer</Footer>
+      <ThemeProvider theme={isDark ? DarkTheme : LightTheme}>
+        <Wrapper>
+          <Header>
+            <Title>TO-DO</Title>
+          </Header>
+          <Main>
+            <Section_L>
+              <Contents>
+                <AddFeatures>
+                  <Time>
+                    <Clock format={"HH:mm:ss"} ticking={true} />
+                  </Time>
+                  <FontAwesomeIcon
+                    onClick={onDarkMode}
+                    icon={isDark ? faSun : faMoon}
+                    style={{
+                      fontSize: "40px",
+                      color: isDark ? "yellow" : "black",
+                      cursor: "pointer",
+                    }}
+                  ></FontAwesomeIcon>
+                </AddFeatures>
+                <Weather>
+                  <WeatherImg />
+                  <Temp>13C</Temp>
+                  <WeatherState>partly-cloudy-night</WeatherState>
+                </Weather>
+                <TodayTodo>
+                  <ToDoSelect>
+                    <StateBtn>todo</StateBtn>
+                    <StateBtn>doing</StateBtn>
+                    <StateBtn>done</StateBtn>
+                  </ToDoSelect>
+                  <List>
+                    {[1, 2, 3, 4, 5, 6].map((v, idx) => (
+                      <Item key={idx}>오늘 할일111111111111111111</Item>
+                    ))}
+                  </List>
+                </TodayTodo>
+              </Contents>
+            </Section_L>
+            <Section_R>
+              <Contents2>
+                <Date>JULY 2022</Date>
+                <WeekList>
+                  {["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"].map(
+                    (v, idx) => (
+                      <WeekItem key={idx}>{v}</WeekItem>
+                    )
+                  )}
+                </WeekList>
+                <hr style={{ width: "100%" }} />
+                <Days>
+                  {arr.map((v, idx) =>
+                    v.map((v2, idx) => <Day key={idx}>{v2}</Day>)
+                  )}
+                </Days>
+              </Contents2>
+            </Section_R>
+          </Main>
+        </Wrapper>
+        <Footer>footer</Footer>
+        <GlobalStyle />
+      </ThemeProvider>
     </>
   );
 }
