@@ -1,9 +1,15 @@
 function App() {
   return (
-    <>
-      <h1>header</h1>
-      <div>To-Do</div>;
-    </>
+    <div>
+      <header>
+        <title>TO-do</title>
+      </header>
+      <main>
+        <section></section>
+        <section></section>
+      </main>
+      <footer></footer>
+    </div>
   );
 }
 
