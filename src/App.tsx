@@ -46,6 +46,7 @@ const AddFeatures = styled.div`
 `;
 const Time = styled.time`
   font-size: 20px;
+  font-weight: bold;
 `;
 const Icon = styled.span`
   font-size: 25px;
