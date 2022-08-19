@@ -1,11 +1,15 @@
 import { DefaultTheme } from "styled-components";
 
 export const DarkTheme: DefaultTheme = {
-  bgColor: "#000",
-  textColor: "#fff",
+  L_SectionBgColor: "#8588DD",
+  R_SectionBgColor: "#000",
+  textColor: "#000",
+  CalenderTitleColor: "#8588DD",
 };
 
 export const LightTheme: DefaultTheme = {
-  bgColor: "#fff",
+  L_SectionBgColor: "#8588DD",
+  R_SectionBgColor: "#000",
   textColor: "#000",
+  CalenderTitleColor: "#8588DD",
 };
