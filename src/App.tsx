@@ -89,7 +89,48 @@ const List = styled.ul`
   margin-top: 35px;
 `;
 const Item = styled.li``;
+
+////////////////////////////////////////
+
+const Contents2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+`;
+
+const Date = styled.h1`
+  font-size: 48px;
+`;
+
+const WeekList = styled.ul`
+  display: flex;
+  gap: 44px;
+  font-size: 20px;
+`;
+
+const WeekItem = styled.li``;
+
+const Days = styled.div`
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* grid-template-rows: repeat(6, 1fr); */
+`;
+const Day = styled.div`
+  border: 1px solid black;
+  padding: 30px;
+`;
+
 function App() {
+  const arr = [
+    [1, 2, 3, 4, 5, 6, 7],
+    [8, 9, 10, 11, 12, 13, 14],
+    [15, 16, 17, 18, 19, 20, 21],
+    [22, 23, 24, 25, 26, 27, 28],
+    [29, 30, 31, 1, 2, 3, 4],
+    [5, 6, 7, 8, 9, 10, 11],
+  ];
   return (
     <>
       <Wrapper>
@@ -127,7 +168,24 @@ function App() {
               </TodayTodo>
             </Contents>
           </Section>
-          <Section>section_2</Section>
+          <Section>
+            <Contents2>
+              <Date>JULY 2022</Date>
+              <WeekList>
+                <WeekItem>MON</WeekItem>
+                <WeekItem>TUE</WeekItem>
+                <WeekItem>WED</WeekItem>
+                <WeekItem>THU</WeekItem>
+                <WeekItem>FRI</WeekItem>
+                <WeekItem>SUN</WeekItem>
+                <WeekItem>SAT</WeekItem>
+              </WeekList>
+              <hr style={{ width: "100%" }} />
+              <Days>
+                {arr.map((v, idx) => v.map((v2, idx) => <Day>{v2}</Day>))}
+              </Days>
+            </Contents2>
+          </Section>
         </Main>
       </Wrapper>
       <Footer>footer</Footer>
