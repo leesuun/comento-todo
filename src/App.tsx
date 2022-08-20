@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { DarkTheme, LightTheme } from "./theme";
 import { themeAtom, toDoAtom } from "./atom";
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { faMoon, faSun, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Calender } from "./utils/calender";
 import React, { FormEvent, useState } from "react";
@@ -115,9 +115,6 @@ const Time = styled.time`
   font-size: 20px;
   font-weight: bold;
 `;
-const Icon = styled.span`
-  font-size: 25px;
-`;
 
 const Weather = styled.div`
   display: flex;
@@ -166,6 +163,7 @@ const Contents2 = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 30px;
+  position: relative;
 `;
 
 const Date = styled.h1`
@@ -191,10 +189,24 @@ const Day = styled.div`
 `;
 
 const Form = styled.form`
-  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 200px;
+  width: 600px;
   height: 300px;
+  padding: 20px;
+  border-radius: 30px;
+  background-color: ${(props) => props.theme.BasicColor};
 `;
-const Input = styled.input``;
+const Input = styled.input`
+  height: 25px;
+  width: 50%;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+`;
 
 interface ILocationProps {
   rowIdx: number | 0;
@@ -207,9 +219,9 @@ function App() {
   const [toDo, setToDo] = useRecoilState(toDoAtom);
   const [addToDo, setAddToDo] = useState("");
   const [dayLocation, setDayLocation] = useState<ILocationProps>();
+  const [form, setForm] = useState(false);
 
   const onDarkMode = () => setIsDark((prev) => !prev);
-  const [form, setForm] = useState(false);
 
   const onClick = (rowIdx: number, colIdx: number, month: string) => {
     setDayLocation(() => {
@@ -217,6 +229,8 @@ function App() {
     });
     setForm((prev) => !prev);
   };
+
+  const onExit = () => setForm((prev) => !prev);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -323,7 +337,23 @@ function App() {
                 </Days>
                 {form ? (
                   <Form onSubmit={onSubmit}>
-                    <Input type="text" value={addToDo} onInput={onInput} />
+                    <FontAwesomeIcon
+                      onClick={onExit}
+                      style={{
+                        position: "absolute",
+                        top: "15px",
+                        right: "15px",
+                        fontSize: "30px",
+                        cursor: "pointer",
+                      }}
+                      icon={faXmark}
+                    ></FontAwesomeIcon>
+                    <Input
+                      placeholder="add a toDo..."
+                      type="text"
+                      value={addToDo}
+                      onInput={onInput}
+                    />
                   </Form>
                 ) : null}
               </Contents2>
