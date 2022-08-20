@@ -6,6 +6,8 @@ import { DarkTheme, LightTheme } from "./theme";
 import { themeAtom } from "./atom";
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Calender } from "./utils/calender";
+import { useState } from "react";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -191,17 +193,7 @@ const Day = styled.div`
 function App() {
   const [isDark, setIsDark] = useRecoilState(themeAtom);
 
-  const arr = [
-    [1, 2, 3, 4, 5, 6, 7],
-    [8, 9, 10, 11, 12, 13, 14],
-    [15, 16, 17, 18, 19, 20, 21],
-    [22, 23, 24, 25, 26, 27, 28],
-    [29, 30, 31, 1, 2, 3, 4],
-    [5, 6, 7, 8, 9, 10, 11],
-  ];
-
   const onDarkMode = () => setIsDark((prev) => !prev);
-  console.log(isDark);
 
   return (
     <>
@@ -258,9 +250,13 @@ function App() {
                 </WeekList>
                 <hr style={{ width: "100%" }} />
                 <Days>
-                  {arr.map((v, idx) =>
-                    v.map((v2, idx) => <Day key={idx}>{v2}</Day>)
-                  )}
+                  {test
+                    ? Calender.july.map((v, idx) =>
+                        v.map((v2, idx) => <Day key={idx}>{v2.day}</Day>)
+                      )
+                    : Calender.august.map((v, idx) =>
+                        v.map((v2, idx) => <Day key={idx}>{v2.day}</Day>)
+                      )}
                 </Days>
               </Contents2>
             </Section_R>
