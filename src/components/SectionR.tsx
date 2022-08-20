@@ -1,9 +1,13 @@
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faXmark,
+  faArrowLeft,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { toDoAtom } from "../atom";
+import { nowMonthAtom, toDoAtom } from "../atom";
 import { Calender } from "../utils/calender";
 
 const Section_R = styled.section`
@@ -18,9 +22,27 @@ const Contents2 = styled.div`
   position: relative;
 `;
 
-const Date = styled.h1`
+const Date = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
   font-size: 48px;
   font-weight: bold;
+  gap: 15px;
+`;
+
+const MonthChangeBtn = styled.button`
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 25px;
+  cursor: pointer;
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const WeekList = styled.ul`
@@ -80,11 +102,12 @@ const Week = ["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"];
 
 function SectionR() {
   const [dayLocation, setDayLocation] = useState<ILocationProps>();
-  const [form, setForm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [toDo, setToDo] = useRecoilState(toDoAtom);
   const [addToDo, setAddToDo] = useState("");
+  const [isJuly, setIsJuly] = useRecoilState(nowMonthAtom);
 
-  const onExit = () => setForm((prev) => !prev);
+  const onExit = () => setShowForm((prev) => !prev);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -112,12 +135,14 @@ function SectionR() {
     setDayLocation(() => {
       return { rowIdx, colIdx, month };
     });
-    setForm((prev) => !prev);
+    setShowForm((prev) => !prev);
   };
 
   const onInput = (event: React.FormEvent<HTMLInputElement>) => {
     setAddToDo(event.currentTarget.value);
   };
+
+  const onChangeMonth = () => setIsJuly((prev) => !prev);
 
   const createDay = (month: any) => {
     return month.map((rowData: any, rowIdx: number) =>
@@ -137,7 +162,19 @@ function SectionR() {
   return (
     <Section_R>
       <Contents2>
-        <Date>JULY 2022</Date>
+        <Date>
+          <h2>{isJuly ? "July" : "August"} 2022</h2>
+          {!isJuly ? (
+            <MonthChangeBtn onClick={onChangeMonth}>
+              <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
+            </MonthChangeBtn>
+          ) : null}
+          {!isJuly ? null : (
+            <MonthChangeBtn onClick={onChangeMonth}>
+              <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
+            </MonthChangeBtn>
+          )}
+        </Date>
         <WeekList>
           {Week.map((v, idx) => (
             <WeekItem key={idx}>{v}</WeekItem>
@@ -145,13 +182,13 @@ function SectionR() {
         </WeekList>
         <hr style={{ width: "100%" }} />
         <Days>
-          {true ? (
+          {isJuly ? (
             <>{createDay(Calender.july)}</>
           ) : (
             <>{createDay(Calender.august)}</>
           )}
         </Days>
-        {form ? (
+        {showForm ? (
           <Form onSubmit={onSubmit}>
             <FontAwesomeIcon
               onClick={onExit}

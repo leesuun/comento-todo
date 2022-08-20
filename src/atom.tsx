@@ -16,6 +16,11 @@ export const themeAtom = atom<Boolean>({
   default: false,
 });
 
+export const nowMonthAtom = atom({
+  key: "month",
+  default: true,
+});
+
 export const toDoAtom = atom({
   key: "toDo",
   default: {
