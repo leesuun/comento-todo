@@ -62,7 +62,7 @@ const List = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 35px;
+  margin-top: 34px;
 `;
 const Item = styled.li``;
 
