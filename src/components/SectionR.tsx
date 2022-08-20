@@ -50,7 +50,7 @@ const WeekList = styled.ul`
   gap: 44px;
   font-size: 20px;
   font-weight: bold;
-  color: #7befb7;
+  color: #2fe78e;
 `;
 const WeekItem = styled.li``;
 
