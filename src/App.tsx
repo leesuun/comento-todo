@@ -1,13 +1,11 @@
 import styled from "styled-components";
-import Clock from "react-live-clock";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { useRecoilValue } from "recoil";
 import { DarkTheme, LightTheme } from "./theme";
-import { themeAtom, toDoAtom } from "./atom";
-import { faMoon, faSun, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Calender } from "./utils/calender";
-import React, { FormEvent, useState } from "react";
+import { themeAtom } from "./atom";
+
+import SectionL from "./components/SectionL";
+import SectionR from "./components/SectionR";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -83,180 +81,15 @@ const Main = styled.main`
   width: 1000px;
   max-height: 700px;
 `;
-const Section_L = styled.section`
-  padding: 10px;
-  background-color: ${(props) => props.theme.SectionColor_L};
-`;
-
-const Section_R = styled.section`
-  padding: 10px;
-  background-color: ${(props) => props.theme.SectionColor_R};
-`;
-
-const Contents = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 100px;
-`;
 
 const Footer = styled.footer`
   margin-top: 30px;
   height: 100px;
   border: 3px solid green;
 `;
-const AddFeatures = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-`;
-const Time = styled.time`
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const Weather = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  flex-direction: column;
-`;
-const WeatherImg = styled.img`
-  border: 1px solid black;
-  width: 70px;
-  height: 70px;
-`;
-const Temp = styled.strong`
-  font-size: 25px;
-`;
-const WeatherState = styled.small``;
-
-const TodayTodo = styled.div`
-  width: 100%;
-`;
-const ToDoSelect = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 3px;
-  text-align: center;
-`;
-const StateBtn = styled.button`
-  padding: 5px 20px;
-  border-radius: 10px;
-  background-color: black;
-  color: white;
-`;
-const List = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 35px;
-`;
-const Item = styled.li``;
-
-////////////////////////////////////////
-
-const Contents2 = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  position: relative;
-`;
-
-const Date = styled.h1`
-  font-size: 48px;
-`;
-
-const WeekList = styled.ul`
-  display: flex;
-  gap: 44px;
-  font-size: 20px;
-`;
-
-const WeekItem = styled.li``;
-
-const Days = styled.div`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  /* grid-template-rows: repeat(6, 1fr); */
-`;
-const Day = styled.div`
-  border: 1px solid black;
-  padding: 30px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: 200px;
-  width: 600px;
-  height: 300px;
-  padding: 20px;
-  border-radius: 30px;
-  background-color: ${(props) => props.theme.BasicColor};
-`;
-const Input = styled.input`
-  height: 25px;
-  width: 50%;
-  border-radius: 5px;
-  border: none;
-  padding: 5px;
-`;
-
-interface ILocationProps {
-  rowIdx: number | 0;
-  colIdx: number | 0;
-  month: string | "";
-}
 
 function App() {
-  const [isDark, setIsDark] = useRecoilState(themeAtom);
-  const [toDo, setToDo] = useRecoilState(toDoAtom);
-  const [addToDo, setAddToDo] = useState("");
-  const [dayLocation, setDayLocation] = useState<ILocationProps>();
-  const [form, setForm] = useState(false);
-
-  const onDarkMode = () => setIsDark((prev) => !prev);
-
-  const onClick = (rowIdx: number, colIdx: number, month: string) => {
-    setDayLocation(() => {
-      return { rowIdx, colIdx, month };
-    });
-    setForm((prev) => !prev);
-  };
-
-  const onExit = () => setForm((prev) => !prev);
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setAddToDo("");
-    setToDo((prev) => {
-      if (dayLocation?.rowIdx === undefined) return prev;
-
-      if (dayLocation.month === "july") {
-        const copyJuly = JSON.parse(JSON.stringify(prev.july));
-        copyJuly[dayLocation.rowIdx][dayLocation.colIdx].toDo.push(addToDo);
-        return { august: prev.august, july: copyJuly };
-      }
-
-      if (dayLocation.month === "august") {
-        const copyAugust = JSON.parse(JSON.stringify(prev.august));
-        copyAugust[dayLocation.rowIdx][dayLocation.colIdx].toDo.push(addToDo);
-        return { august: copyAugust, july: prev.july };
-      }
-
-      return prev;
-    });
-  };
-
-  const onInput = (event: React.FormEvent<HTMLInputElement>) => {
-    setAddToDo(event.currentTarget.value);
-  };
+  const isDark = useRecoilValue(themeAtom);
 
   return (
     <>
@@ -266,98 +99,8 @@ function App() {
             <Title>TO-DO</Title>
           </Header>
           <Main>
-            <Section_L>
-              <Contents>
-                <AddFeatures>
-                  <Time>
-                    <Clock format={"HH:mm:ss"} ticking={true} />
-                  </Time>
-                  <FontAwesomeIcon
-                    onClick={onDarkMode}
-                    icon={isDark ? faSun : faMoon}
-                    style={{
-                      fontSize: "40px",
-                      color: isDark ? "yellow" : "black",
-                      cursor: "pointer",
-                    }}
-                  ></FontAwesomeIcon>
-                </AddFeatures>
-                <Weather>
-                  <WeatherImg />
-                  <Temp>13C</Temp>
-                  <WeatherState>partly-cloudy-night</WeatherState>
-                </Weather>
-                <TodayTodo>
-                  <ToDoSelect>
-                    <StateBtn>todo</StateBtn>
-                    <StateBtn>doing</StateBtn>
-                    <StateBtn>done</StateBtn>
-                  </ToDoSelect>
-                  <List>
-                    {[1, 2, 3, 4, 5, 6].map((v, idx) => (
-                      <Item key={idx}>오늘 할일111111111111111111</Item>
-                    ))}
-                  </List>
-                </TodayTodo>
-              </Contents>
-            </Section_L>
-            <Section_R>
-              <Contents2>
-                <Date>JULY 2022</Date>
-                <WeekList>
-                  {["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"].map(
-                    (v, idx) => (
-                      <WeekItem key={idx}>{v}</WeekItem>
-                    )
-                  )}
-                </WeekList>
-                <hr style={{ width: "100%" }} />
-                <Days>
-                  {true
-                    ? Calender.july.map((rowData, rowIdx) =>
-                        rowData.map((colData, colIdx) => (
-                          <Day
-                            onClick={() => onClick(rowIdx, colIdx, "july")}
-                            key={colIdx}
-                          >
-                            {colData.day}
-                          </Day>
-                        ))
-                      )
-                    : Calender.august.map((rowData, rowIdx) =>
-                        rowData.map((colData, colIdx) => (
-                          <Day
-                            onClick={() => onClick(rowIdx, colIdx, "august")}
-                            key={colIdx}
-                          >
-                            {colData.day}
-                          </Day>
-                        ))
-                      )}
-                </Days>
-                {form ? (
-                  <Form onSubmit={onSubmit}>
-                    <FontAwesomeIcon
-                      onClick={onExit}
-                      style={{
-                        position: "absolute",
-                        top: "15px",
-                        right: "15px",
-                        fontSize: "30px",
-                        cursor: "pointer",
-                      }}
-                      icon={faXmark}
-                    ></FontAwesomeIcon>
-                    <Input
-                      placeholder="add a toDo..."
-                      type="text"
-                      value={addToDo}
-                      onInput={onInput}
-                    />
-                  </Form>
-                ) : null}
-              </Contents2>
-            </Section_R>
+            <SectionL />
+            <SectionR />
           </Main>
         </Wrapper>
         <Footer>footer</Footer>
