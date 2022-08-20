@@ -20,22 +20,35 @@ const Contents2 = styled.div`
 
 const Date = styled.h1`
   font-size: 48px;
+  font-weight: bold;
 `;
 
 const WeekList = styled.ul`
   display: flex;
   gap: 44px;
   font-size: 20px;
+  font-weight: bold;
+  color: #7befb7;
 `;
 const WeekItem = styled.li``;
 
 const Days = styled.div`
   display: grid;
+  grid-gap: 1px;
   grid-template-columns: repeat(7, 1fr);
 `;
-const Day = styled.div`
-  border: 1px solid black;
+const Day = styled.div<{ isHoliday: boolean; thisMonth: boolean }>`
   padding: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 20px;
+  color: ${(props) => (props.isHoliday ? "red" : "inherit")};
+  opacity: ${(props) => (props.thisMonth ? 1 : 0.3)};
+  pointer-events: ${(props) => (props.thisMonth ? "" : "none")};
+
+  &:hover {
+    background-color: lightgray;
+  }
 `;
 const Form = styled.form`
   display: flex;
@@ -110,6 +123,8 @@ function SectionR() {
     return month.map((rowData: any, rowIdx: number) =>
       rowData.map((colData: any, colIdx: number) => (
         <Day
+          isHoliday={colData.isHoliday}
+          thisMonth={colData.thisMonth}
           onClick={() => onClick(rowIdx, colIdx, `${month[0][0].month}`)}
           key={colIdx}
         >
