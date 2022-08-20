@@ -64,7 +64,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 7px solid black;
   padding: 15px;
 `;
 const Header = styled.header`
@@ -77,7 +76,7 @@ const Main = styled.main`
   display: grid;
   grid-template-columns: 1fr 2fr;
   margin-top: 50px;
-  border: 5px solid red;
+  box-shadow: 5px 5px 5px black;
   width: 1000px;
   max-height: 700px;
 `;

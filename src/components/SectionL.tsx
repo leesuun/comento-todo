@@ -5,7 +5,6 @@ import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import { themeAtom } from "../atom";
 import { useEffect, useState } from "react";
-import { env } from "process";
 
 const Section = styled.section`
   padding: 10px;
