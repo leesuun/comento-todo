@@ -10,11 +10,11 @@ import styled from "styled-components";
 import { nowMonthAtom, toDoAtom } from "../atom";
 import { Calender } from "../utils/calender";
 
-const Section_R = styled.section`
+const Section = styled.section`
   padding: 10px;
   background-color: ${(props) => props.theme.SectionColor_R};
 `;
-const Contents2 = styled.div`
+const Contents = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -161,8 +161,8 @@ function SectionR() {
   };
 
   return (
-    <Section_R>
-      <Contents2>
+    <Section>
+      <Contents>
         <Date>
           <h2>{isJuly ? "July" : "August"} 2022</h2>
           {!isJuly ? (
@@ -210,8 +210,8 @@ function SectionR() {
             />
           </Form>
         ) : null}
-      </Contents2>
-    </Section_R>
+      </Contents>
+    </Section>
   );
 }
 

@@ -4,8 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import { themeAtom } from "../atom";
+import { useEffect, useState } from "react";
 
-const Section_L = styled.section`
+const Section = styled.section`
   padding: 10px;
   background-color: ${(props) => props.theme.SectionColor_L};
 `;
@@ -30,16 +31,15 @@ const Weather = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 5px;
   flex-direction: column;
 `;
-const WeatherImg = styled.img`
-  border: 1px solid black;
-  width: 70px;
-  height: 70px;
+const WeatherImg = styled.img<{ src: string }>`
+  background-image: url(src);
 `;
 const Temp = styled.strong`
   font-size: 25px;
+  font-weight: bold;
 `;
 const WeatherState = styled.small``;
 
@@ -66,12 +66,38 @@ const List = styled.ul`
 `;
 const Item = styled.li``;
 
+interface IWeatherProps {
+  weather: [{ description: string; icon: string }];
+  main: { temp: number };
+  name: string;
+}
+
 function SectionL() {
   const [isDark, setIsDark] = useRecoilState(themeAtom);
   const onDarkMode = () => setIsDark((prev) => !prev);
+  const [weather, setWeather] = useState<IWeatherProps>();
+
+  useEffect(() => {
+    const API_KEY = "b49d199d78db4d81dcf44e33698ac973";
+
+    function getGeoInfoSuccess(position: GeolocationPosition) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => setWeather(data));
+    }
+
+    function getGeoInfoFail() {
+      alert("Cannot get the weather..!!");
+    }
+
+    navigator.geolocation.getCurrentPosition(getGeoInfoSuccess, getGeoInfoFail);
+  }, []);
 
   return (
-    <Section_L>
+    <Section>
       <Contents>
         <AddFeatures>
           <Time>
@@ -88,9 +114,11 @@ function SectionL() {
           ></FontAwesomeIcon>
         </AddFeatures>
         <Weather>
-          <WeatherImg />
-          <Temp>13C</Temp>
-          <WeatherState>partly-cloudy-night</WeatherState>
+          <WeatherImg
+            src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
+          />
+          <Temp>{weather?.main.temp.toFixed(1) + "℃"}</Temp>
+          <WeatherState>{weather?.weather[0].description}</WeatherState>
         </Weather>
         <TodayTodo>
           <ToDoSelect>
@@ -105,7 +133,7 @@ function SectionL() {
           </List>
         </TodayTodo>
       </Contents>
-    </Section_L>
+    </Section>
   );
 }
 
