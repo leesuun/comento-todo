@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import Clock from "react-live-clock";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { DarkTheme, LightTheme } from "./theme";
-import { themeAtom } from "./atom";
+import { themeAtom, toDoAtom } from "./atom";
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Calender } from "./utils/calender";
-import { useState } from "react";
+import React, { FormEvent, useState } from "react";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -190,10 +190,59 @@ const Day = styled.div`
   padding: 30px;
 `;
 
+const Form = styled.form`
+  width: 300px;
+  height: 300px;
+`;
+const Input = styled.input``;
+
+interface ILocationProps {
+  rowIdx: number | 0;
+  colIdx: number | 0;
+  month: string | "";
+}
+
 function App() {
   const [isDark, setIsDark] = useRecoilState(themeAtom);
+  const [toDo, setToDo] = useRecoilState(toDoAtom);
+  const [addToDo, setAddToDo] = useState("");
+  const [dayLocation, setDayLocation] = useState<ILocationProps>();
 
   const onDarkMode = () => setIsDark((prev) => !prev);
+  const [form, setForm] = useState(false);
+
+  const onClick = (rowIdx: number, colIdx: number, month: string) => {
+    setDayLocation(() => {
+      return { rowIdx, colIdx, month };
+    });
+    setForm((prev) => !prev);
+  };
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setAddToDo("");
+    setToDo((prev) => {
+      if (dayLocation?.rowIdx === undefined) return prev;
+
+      if (dayLocation.month === "july") {
+        const copyJuly = JSON.parse(JSON.stringify(prev.july));
+        copyJuly[dayLocation.rowIdx][dayLocation.colIdx].toDo.push(addToDo);
+        return { august: prev.august, july: copyJuly };
+      }
+
+      if (dayLocation.month === "august") {
+        const copyAugust = JSON.parse(JSON.stringify(prev.august));
+        copyAugust[dayLocation.rowIdx][dayLocation.colIdx].toDo.push(addToDo);
+        return { august: copyAugust, july: prev.july };
+      }
+
+      return prev;
+    });
+  };
+
+  const onInput = (event: React.FormEvent<HTMLInputElement>) => {
+    setAddToDo(event.currentTarget.value);
+  };
 
   return (
     <>
@@ -250,14 +299,33 @@ function App() {
                 </WeekList>
                 <hr style={{ width: "100%" }} />
                 <Days>
-                  {test
-                    ? Calender.july.map((v, idx) =>
-                        v.map((v2, idx) => <Day key={idx}>{v2.day}</Day>)
+                  {true
+                    ? Calender.july.map((rowData, rowIdx) =>
+                        rowData.map((colData, colIdx) => (
+                          <Day
+                            onClick={() => onClick(rowIdx, colIdx, "july")}
+                            key={colIdx}
+                          >
+                            {colData.day}
+                          </Day>
+                        ))
                       )
-                    : Calender.august.map((v, idx) =>
-                        v.map((v2, idx) => <Day key={idx}>{v2.day}</Day>)
+                    : Calender.august.map((rowData, rowIdx) =>
+                        rowData.map((colData, colIdx) => (
+                          <Day
+                            onClick={() => onClick(rowIdx, colIdx, "august")}
+                            key={colIdx}
+                          >
+                            {colData.day}
+                          </Day>
+                        ))
                       )}
                 </Days>
+                {form ? (
+                  <Form onSubmit={onSubmit}>
+                    <Input type="text" value={addToDo} onInput={onInput} />
+                  </Form>
+                ) : null}
               </Contents2>
             </Section_R>
           </Main>
