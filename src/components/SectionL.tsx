@@ -79,6 +79,7 @@ function SectionL() {
 
   useEffect(() => {
     const API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
+
     function getGeoInfoSuccess(position: GeolocationPosition) {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
@@ -116,6 +117,7 @@ function SectionL() {
           <WeatherImg
             src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
           />
+
           <Temp>{weather?.main.temp.toFixed(1) + "℃"}</Temp>
           <WeatherState>{weather?.weather[0].description}</WeatherState>
         </Weather>
