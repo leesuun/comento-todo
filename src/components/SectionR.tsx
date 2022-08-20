@@ -64,6 +64,7 @@ const Day = styled.div<{ isHoliday: boolean; thisMonth: boolean }>`
   cursor: pointer;
   font-weight: bold;
   font-size: 20px;
+  text-align: center;
   color: ${(props) => (props.isHoliday ? "red" : "inherit")};
   opacity: ${(props) => (props.thisMonth ? 1 : 0.3)};
   pointer-events: ${(props) => (props.thisMonth ? "" : "none")};
