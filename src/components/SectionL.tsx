@@ -5,7 +5,6 @@ import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import { themeAtom } from "../atom";
 import { useEffect, useState } from "react";
-import { env } from "process";
 
 const Section = styled.section`
   padding: 10px;
@@ -79,7 +78,7 @@ function SectionL() {
   const [weather, setWeather] = useState<IWeatherProps>();
 
   useEffect(() => {
-    const API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
+    const API_KEY = "b49d199d78db4d81dcf44e33698ac973";
     function getGeoInfoSuccess(position: GeolocationPosition) {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
