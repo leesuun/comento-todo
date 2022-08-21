@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-interface IToDo {
+export interface IToDo {
   toDo: string[];
   doing: string[];
   done: string[];

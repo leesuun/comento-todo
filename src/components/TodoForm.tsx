@@ -3,7 +3,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
-import { toDoAtom } from "../atom";
+import { IToDo, toDoAtom } from "../atom";
 
 const Form = styled.form`
   display: flex;
@@ -12,7 +12,7 @@ const Form = styled.form`
   position: absolute;
   top: 200px;
   width: 600px;
-  height: 300px;
+  height: 400px;
   padding: 20px;
   border-radius: 30px;
   gap: 15px;
@@ -43,7 +43,13 @@ const Contents = styled.div`
 
 const TodoList = styled.ul`
   width: 200px;
+  padding: 3px;
   border: 1px solid black;
+`;
+
+const ToDoTitle = styled.h2`
+  text-align: center;
+  font-size: 20px;
 `;
 const TodoItem = styled.li``;
 
@@ -64,6 +70,29 @@ function TodoForm({
 }: IToDoFormProps) {
   const [toDos, setToDo] = useRecoilState(toDoAtom);
   const [addToDo, setAddToDo] = useState("");
+
+  const findSelectTodo = () => {
+    const selectTodoList: any = {};
+
+    const pushData = (month: IToDo[][]) => {
+      selectTodoList.toDo = month[rowIdx][colIdx].toDo;
+      selectTodoList.doing = month[rowIdx][colIdx].doing;
+      selectTodoList.done = month[rowIdx][colIdx].done;
+    };
+    switch (month) {
+      case "july": {
+        pushData(toDos.july);
+        break;
+      }
+      case "august": {
+        pushData(toDos.august);
+        break;
+      }
+      default:
+        break;
+    }
+    return selectTodoList;
+  };
 
   const onExit = () => setShowForm((prev) => !prev);
 
@@ -106,7 +135,22 @@ function TodoForm({
             value={addToDo}
             onInput={onInput}
           />
-          <Contents>{month === "july" ? <TodoList></TodoList> : null}</Contents>
+          <Contents>
+            {month === "july"
+              ? Object.keys(findSelectTodo()).map((toDo) => (
+                  <>
+                    <TodoList key={toDo}>
+                      <ToDoTitle>
+                        {toDo[0].toUpperCase() + toDo.slice(1)}
+                      </ToDoTitle>
+                      {findSelectTodo()[toDo].map((text: any) => (
+                        <TodoItem>{text}</TodoItem>
+                      ))}
+                    </TodoList>
+                  </>
+                ))
+              : null}
+          </Contents>
         </Form>
       ) : null}
     </>
