@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-interface IToDo {
+export interface IToDo {
   toDo: string[];
   doing: string[];
   done: string[];
@@ -24,7 +24,7 @@ export const nowMonthAtom = atom({
 export const toDoAtom = atom({
   key: "toDo",
   default: {
-    july: [...Array(7)].map((_) => [...Array(6)].map((_) => toDoObj)),
-    august: [...Array(7)].map((_) => [...Array(6)].map((_) => toDoObj)),
+    july: [...Array(6)].map((_) => [...Array(7)].map((_) => toDoObj)),
+    august: [...Array(6)].map((_) => [...Array(7)].map((_) => toDoObj)),
   },
 });
