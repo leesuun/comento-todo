@@ -35,7 +35,7 @@ const Weather = styled.div`
   flex-direction: column;
 `;
 const WeatherImg = styled.img<{ src: string }>`
-  background-image: url(src);
+  /* background-image: url(src); */
 `;
 const Temp = styled.strong`
   font-size: 25px;
@@ -115,7 +115,8 @@ function SectionL() {
         </AddFeatures>
         <Weather>
           <WeatherImg
-            src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
+            src=""
+            // src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
           />
 
           <Temp>{weather?.main.temp.toFixed(1) + "℃"}</Temp>

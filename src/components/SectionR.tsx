@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { nowMonthAtom, toDoAtom } from "../atom";
 import { Calender } from "../utils/calender";
@@ -104,7 +104,7 @@ const Week = ["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"];
 function SectionR() {
   const [dayLocation, setDayLocation] = useState<ILocationProps>();
   const [showForm, setShowForm] = useState(false);
-  const [toDo, setToDo] = useRecoilState(toDoAtom);
+  const setToDo = useSetRecoilState(toDoAtom);
   const [addToDo, setAddToDo] = useState("");
   const [isJuly, setIsJuly] = useRecoilState(nowMonthAtom);
 
