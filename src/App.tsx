@@ -84,7 +84,7 @@ const Main = styled.main`
 const Footer = styled.footer`
   margin-top: 30px;
   height: 100px;
-  border: 3px solid green;
+  border: 2px solid green;
 `;
 
 function App() {
