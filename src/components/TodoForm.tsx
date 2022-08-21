@@ -17,6 +17,15 @@ const Form = styled.form`
   border-radius: 30px;
   background-color: ${(props) => props.theme.BasicColor};
 `;
+
+const XMarkIcon = styled.div`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 30px;
+  cursor: pointer;
+`;
+
 const Input = styled.input`
   height: 25px;
   width: 50%;
@@ -73,17 +82,9 @@ function TodoForm({
     <>
       {showForm ? (
         <Form onSubmit={onSubmit}>
-          <FontAwesomeIcon
-            onClick={onExit}
-            style={{
-              position: "absolute",
-              top: "15px",
-              right: "15px",
-              fontSize: "30px",
-              cursor: "pointer",
-            }}
-            icon={faXmark}
-          ></FontAwesomeIcon>
+          <XMarkIcon>
+            <FontAwesomeIcon onClick={onExit} icon={faXmark}></FontAwesomeIcon>
+          </XMarkIcon>
           <Input
             placeholder="Add a todo..."
             type="text"

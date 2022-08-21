@@ -66,6 +66,12 @@ const List = styled.ul`
 `;
 const Item = styled.li``;
 
+const ThemeChangeIcon = styled.div<{ isDark: Boolean }>`
+  font-size: 40px;
+  color: ${(props) => (props.isDark ? "yellow" : "black")};
+  cursor: pointer;
+`;
+
 interface IWeatherProps {
   weather: [{ description: string; icon: string }];
   main: { temp: number };
@@ -103,15 +109,12 @@ function SectionL() {
           <Time>
             <Clock format={"HH:mm:ss"} ticking={true} />
           </Time>
-          <FontAwesomeIcon
-            onClick={onDarkMode}
-            icon={isDark ? faSun : faMoon}
-            style={{
-              fontSize: "40px",
-              color: isDark ? "yellow" : "black",
-              cursor: "pointer",
-            }}
-          ></FontAwesomeIcon>
+          <ThemeChangeIcon isDark={isDark}>
+            <FontAwesomeIcon
+              onClick={onDarkMode}
+              icon={isDark ? faSun : faMoon}
+            ></FontAwesomeIcon>
+          </ThemeChangeIcon>
         </AddFeatures>
         <Weather>
           <WeatherImg
