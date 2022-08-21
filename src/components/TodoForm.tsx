@@ -17,6 +17,8 @@ const Form = styled.form`
   border-radius: 30px;
   gap: 15px;
   background-color: ${(props) => props.theme.BasicColor};
+
+  background: radial-gradient(#b7eef7, ${(props) => props.theme.BasicColor});
 `;
 
 const XMarkIcon = styled.div`
@@ -39,19 +41,35 @@ const Contents = styled.div`
   display: flex;
   gap: 5px;
   padding: 10px;
-`;
-
-const TodoList = styled.ul`
-  width: 200px;
-  padding: 3px;
-  border: 1px solid black;
+  min-height: 300px;
 `;
 
 const ToDoTitle = styled.h2`
   text-align: center;
   font-size: 20px;
+  margin-bottom: 15px;
 `;
-const TodoItem = styled.li``;
+
+const TodoList = styled.ul`
+  width: 200px;
+  padding: 3px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background-color: lightgray;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const TodoItem = styled.li`
+  padding: 7px 3px;
+  text-align: left;
+  border-radius: 5px;
+  background-color: whitesmoke;
+`;
 
 interface IToDoFormProps {
   rowIdx: number | 0;
@@ -138,16 +156,14 @@ function TodoForm({
           <Contents>
             {month === "july"
               ? Object.keys(findSelectTodo()).map((toDo) => (
-                  <>
-                    <TodoList key={toDo}>
-                      <ToDoTitle>
-                        {toDo[0].toUpperCase() + toDo.slice(1)}
-                      </ToDoTitle>
-                      {findSelectTodo()[toDo].map((text: any) => (
-                        <TodoItem>{text}</TodoItem>
-                      ))}
-                    </TodoList>
-                  </>
+                  <TodoList key={toDo}>
+                    <ToDoTitle>
+                      {toDo[0].toUpperCase() + toDo.slice(1)}
+                    </ToDoTitle>
+                    {findSelectTodo()[toDo].map((text: string) => (
+                      <TodoItem key={text}>{"• " + text}</TodoItem>
+                    ))}
+                  </TodoList>
                 ))
               : null}
           </Contents>
