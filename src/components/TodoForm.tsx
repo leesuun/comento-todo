@@ -112,6 +112,17 @@ function TodoForm({
     return selectTodoList;
   };
 
+  const showTodoList = () => {
+    return Object.keys(findSelectTodo()).map((toDo) => (
+      <TodoList key={toDo}>
+        <ToDoTitle>{toDo[0].toUpperCase() + toDo.slice(1)}</ToDoTitle>
+        {findSelectTodo()[toDo].map((text: string) => (
+          <TodoItem key={text}>{"• " + text}</TodoItem>
+        ))}
+      </TodoList>
+    ));
+  };
+
   const onExit = () => setShowForm((prev) => !prev);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -154,27 +165,7 @@ function TodoForm({
             onInput={onInput}
           />
           <Contents>
-            {month === "july"
-              ? Object.keys(findSelectTodo()).map((toDo) => (
-                  <TodoList key={toDo}>
-                    <ToDoTitle>
-                      {toDo[0].toUpperCase() + toDo.slice(1)}
-                    </ToDoTitle>
-                    {findSelectTodo()[toDo].map((text: string) => (
-                      <TodoItem key={text}>{"• " + text}</TodoItem>
-                    ))}
-                  </TodoList>
-                ))
-              : Object.keys(findSelectTodo()).map((toDo) => (
-                  <TodoList key={toDo}>
-                    <ToDoTitle>
-                      {toDo[0].toUpperCase() + toDo.slice(1)}
-                    </ToDoTitle>
-                    {findSelectTodo()[toDo].map((text: string) => (
-                      <TodoItem key={text}>{"• " + text}</TodoItem>
-                    ))}
-                  </TodoList>
-                ))}
+            {month === "july" ? showTodoList() : showTodoList()}
           </Contents>
         </Form>
       ) : null}
