@@ -92,10 +92,11 @@ function TodoForm({
   const findSelectTodo = () => {
     const selectTodoList: any = {};
 
+    console.log(toDos);
     const pushData = (month: IToDo[][]) => {
-      selectTodoList.toDo = month[rowIdx][colIdx].toDo;
-      selectTodoList.doing = month[rowIdx][colIdx].doing;
-      selectTodoList.done = month[rowIdx][colIdx].done;
+      selectTodoList.toDo = month[colIdx][rowIdx].toDo;
+      selectTodoList.doing = month[colIdx][rowIdx].doing;
+      selectTodoList.done = month[colIdx][rowIdx].done;
     };
     switch (month) {
       case "july": {

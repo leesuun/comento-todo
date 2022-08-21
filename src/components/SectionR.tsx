@@ -125,7 +125,7 @@ function SectionR() {
           )}
         </Date>
         <WeekList>
-          {Week.map((v, idx) => (
+          {Week.map((v) => (
             <WeekItem key={v}>{v}</WeekItem>
           ))}
         </WeekList>
