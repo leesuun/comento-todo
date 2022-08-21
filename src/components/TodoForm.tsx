@@ -17,7 +17,6 @@ const Form = styled.form`
   border-radius: 30px;
   gap: 15px;
   background-color: ${(props) => props.theme.BasicColor};
-
   background: radial-gradient(#b7eef7, ${(props) => props.theme.BasicColor});
 `;
 

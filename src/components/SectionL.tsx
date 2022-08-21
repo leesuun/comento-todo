@@ -107,7 +107,7 @@ function SectionL() {
       <Contents>
         <AddFeatures>
           <Time>
-            <Clock format={"HH:mm:ss"} ticking={true} />
+            <Clock format={"MM.DD HH:mm:ss"} ticking={true} />
           </Time>
           <ThemeChangeIcon isDark={isDark}>
             <FontAwesomeIcon
