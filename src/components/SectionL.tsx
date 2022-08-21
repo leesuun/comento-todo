@@ -77,8 +77,6 @@ function SectionL() {
   const onDarkMode = () => setIsDark((prev) => !prev);
   const [weather, setWeather] = useState<IWeatherProps>();
 
-  const [githubActionstest, setGithubActionstest] = useState();
-
   useEffect(() => {
     const API_KEY = "b49d199d78db4d81dcf44e33698ac973";
 
