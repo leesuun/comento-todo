@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { useState } from "react";
 import { toDoAtom } from "../atom";
 
@@ -15,6 +15,7 @@ const Form = styled.form`
   height: 300px;
   padding: 20px;
   border-radius: 30px;
+  gap: 15px;
   background-color: ${(props) => props.theme.BasicColor};
 `;
 
@@ -34,6 +35,18 @@ const Input = styled.input`
   padding: 5px;
 `;
 
+const Contents = styled.div`
+  display: flex;
+  gap: 5px;
+  padding: 10px;
+`;
+
+const TodoList = styled.ul`
+  width: 200px;
+  border: 1px solid black;
+`;
+const TodoItem = styled.li``;
+
 interface IToDoFormProps {
   rowIdx: number | 0;
   colIdx: number | 0;
@@ -49,8 +62,9 @@ function TodoForm({
   showForm,
   setShowForm,
 }: IToDoFormProps) {
-  const setToDo = useSetRecoilState(toDoAtom);
+  const [toDos, setToDo] = useRecoilState(toDoAtom);
   const [addToDo, setAddToDo] = useState("");
+
   const onExit = () => setShowForm((prev) => !prev);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -74,6 +88,7 @@ function TodoForm({
       return prev;
     });
   };
+
   const onInput = (event: React.FormEvent<HTMLInputElement>) => {
     setAddToDo(event.currentTarget.value);
   };
@@ -91,6 +106,7 @@ function TodoForm({
             value={addToDo}
             onInput={onInput}
           />
+          <Contents>{month === "july" ? <TodoList></TodoList> : null}</Contents>
         </Form>
       ) : null}
     </>
