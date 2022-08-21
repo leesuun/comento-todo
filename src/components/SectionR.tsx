@@ -1,14 +1,11 @@
-import {
-  faXmark,
-  faArrowLeft,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import styled from "styled-components";
-import { nowMonthAtom, toDoAtom } from "../atom";
+import { useRecoilState } from "recoil";
+import { nowMonthAtom } from "../atom";
 import { Calender } from "../utils/calender";
+import TodoForm from "./TodoForm";
 
 const Section = styled.section`
   padding: 10px;
@@ -73,30 +70,11 @@ const Day = styled.div<{ isHoliday: boolean; thisMonth: boolean }>`
     background-color: lightgray;
   }
 `;
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: 200px;
-  width: 600px;
-  height: 300px;
-  padding: 20px;
-  border-radius: 30px;
-  background-color: ${(props) => props.theme.BasicColor};
-`;
-const Input = styled.input`
-  height: 25px;
-  width: 50%;
-  border-radius: 5px;
-  border: none;
-  padding: 5px;
-`;
 
-interface ILocationProps {
-  rowIdx: number | 0;
-  colIdx: number | 0;
-  month: string | "";
+export interface ILocationProps {
+  rowIdx: number;
+  colIdx: number;
+  month: string;
 }
 
 const Week = ["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"];
@@ -104,43 +82,13 @@ const Week = ["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"];
 function SectionR() {
   const [dayLocation, setDayLocation] = useState<ILocationProps>();
   const [showForm, setShowForm] = useState(false);
-  const setToDo = useSetRecoilState(toDoAtom);
-  const [addToDo, setAddToDo] = useState("");
   const [isJuly, setIsJuly] = useRecoilState(nowMonthAtom);
-
-  const onExit = () => setShowForm((prev) => !prev);
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setAddToDo("");
-    setToDo((prev) => {
-      if (dayLocation?.rowIdx === undefined) return prev;
-
-      if (dayLocation.month === "july") {
-        const copyJuly = JSON.parse(JSON.stringify(prev.july));
-        copyJuly[dayLocation.rowIdx][dayLocation.colIdx].toDo.push(addToDo);
-        return { august: prev.august, july: copyJuly };
-      }
-
-      if (dayLocation.month === "august") {
-        const copyAugust = JSON.parse(JSON.stringify(prev.august));
-        copyAugust[dayLocation.rowIdx][dayLocation.colIdx].toDo.push(addToDo);
-        return { august: copyAugust, july: prev.july };
-      }
-
-      return prev;
-    });
-  };
 
   const onClick = (rowIdx: number, colIdx: number, month: string) => {
     setDayLocation(() => {
       return { rowIdx, colIdx, month };
     });
     setShowForm((prev) => !prev);
-  };
-
-  const onInput = (event: React.FormEvent<HTMLInputElement>) => {
-    setAddToDo(event.currentTarget.value);
   };
 
   const onChangeMonth = () => setIsJuly((prev) => !prev);
@@ -189,27 +137,13 @@ function SectionR() {
             <>{createDay(Calender.august)}</>
           )}
         </Days>
-        {showForm ? (
-          <Form onSubmit={onSubmit}>
-            <FontAwesomeIcon
-              onClick={onExit}
-              style={{
-                position: "absolute",
-                top: "15px",
-                right: "15px",
-                fontSize: "30px",
-                cursor: "pointer",
-              }}
-              icon={faXmark}
-            ></FontAwesomeIcon>
-            <Input
-              placeholder="add a toDo..."
-              type="text"
-              value={addToDo}
-              onInput={onInput}
-            />
-          </Form>
-        ) : null}
+        <TodoForm
+          colIdx={dayLocation?.colIdx || 0}
+          rowIdx={dayLocation?.rowIdx || 0}
+          month={dayLocation?.month || ""}
+          showForm={showForm}
+          setShowForm={setShowForm}
+        />
       </Contents>
     </Section>
   );
