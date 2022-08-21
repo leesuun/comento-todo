@@ -92,11 +92,10 @@ function TodoForm({
   const findSelectTodo = () => {
     const selectTodoList: any = {};
 
-    console.log(toDos);
     const pushData = (month: IToDo[][]) => {
-      selectTodoList.toDo = month[colIdx][rowIdx].toDo;
-      selectTodoList.doing = month[colIdx][rowIdx].doing;
-      selectTodoList.done = month[colIdx][rowIdx].done;
+      selectTodoList.toDo = month[rowIdx][colIdx].toDo;
+      selectTodoList.doing = month[rowIdx][colIdx].doing;
+      selectTodoList.done = month[rowIdx][colIdx].done;
     };
     switch (month) {
       case "july": {
@@ -166,7 +165,16 @@ function TodoForm({
                     ))}
                   </TodoList>
                 ))
-              : null}
+              : Object.keys(findSelectTodo()).map((toDo) => (
+                  <TodoList key={toDo}>
+                    <ToDoTitle>
+                      {toDo[0].toUpperCase() + toDo.slice(1)}
+                    </ToDoTitle>
+                    {findSelectTodo()[toDo].map((text: string) => (
+                      <TodoItem key={text}>{"• " + text}</TodoItem>
+                    ))}
+                  </TodoList>
+                ))}
           </Contents>
         </Form>
       ) : null}
