@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { toDoAtom } from "../atom";
+import { IToDo, nowMonthAtom, toDoAtom } from "../atom";
 import AddFeatures from "./AddFeatures";
 import Weather from "./Weather";
 
@@ -40,6 +40,24 @@ const Item = styled.li``;
 
 function SectionL() {
   const toDos = useRecoilValue(toDoAtom);
+  const isAug = useRecoilState(nowMonthAtom);
+
+  function findTodayTodo() {
+    let showData: IToDo = { calenderInfo: {}, toDo: [], doing: [], done: [] };
+    if (isAug) {
+      toDos.august.map((row, rowIdx) =>
+        row.map((col, colIdx) => {
+          const { day, thisMonth } = col.calenderInfo;
+          const toDayInfo = new Date().toDateString().slice(4, 10).split(" ");
+          if (String(day) === toDayInfo[1] && thisMonth) {
+            showData = toDos.august[rowIdx][colIdx];
+            return;
+          }
+        })
+      );
+    }
+    return showData;
+  }
 
   return (
     <Section>
@@ -53,8 +71,8 @@ function SectionL() {
             <StateBtn>done</StateBtn>
           </ToDoSelect>
           <List>
-            {[1, 2, 3, 4, 5, 6].map((v, idx) => (
-              <Item key={idx}>오늘 할일111111111111111111</Item>
+            {findTodayTodo()["toDo"].map((v, idx) => (
+              <Item key={idx}>{v}</Item>
             ))}
           </List>
         </TodayTodo>

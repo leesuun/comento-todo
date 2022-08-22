@@ -96,12 +96,13 @@ function TodoForm({
       selectTodoList.doing = month[rowIdx][colIdx].doing;
       selectTodoList.done = month[rowIdx][colIdx].done;
     };
+
     switch (month) {
-      case "august": {
+      case "Aug": {
         pushData(toDos.august);
         break;
       }
-      case "september": {
+      case "Sep": {
         pushData(toDos.september);
         break;
       }
@@ -131,13 +132,13 @@ function TodoForm({
     setToDo((prev) => {
       if (rowIdx === undefined) return prev;
 
-      if (month === "august") {
+      if (month === "Aug") {
         const copyAugust = JSON.parse(JSON.stringify(prev.august));
         copyAugust[rowIdx][colIdx].toDo.push(addToDo);
         return { september: prev.september, august: copyAugust };
       }
 
-      if (month === "september") {
+      if (month === "Sep") {
         const copySeptember = JSON.parse(JSON.stringify(prev.september));
         copySeptember[rowIdx][colIdx].toDo.push(addToDo);
         return { september: copySeptember, august: prev.august };
