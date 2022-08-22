@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { IToDo, nowMonthAtom, toDoAtom, toDoObj } from "../atom";
 import AddFeatures from "./AddFeatures";
 import Weather from "./Weather";
 
@@ -37,6 +40,36 @@ const List = styled.ul`
 const Item = styled.li``;
 
 function SectionL() {
+  const toDos = useRecoilValue(toDoAtom);
+  const isAug = useRecoilState(nowMonthAtom);
+  const [btn, setButton] = useState("toDo" || "doing" || "done");
+
+  const onClickBtn = (state: string) => setButton(state);
+
+  const findTodayTodo = () => {
+    let showData: any = toDoObj;
+    function pickUp(month: IToDo[][]) {
+      month.map((row: any, rowIdx: number) =>
+        row.map(
+          (
+            col: { calenderInfo: { day: number; thisMonth: boolean } },
+            colIdx: number
+          ) => {
+            const { day, thisMonth } = col.calenderInfo;
+            const toDayInfo = new Date().toDateString().slice(4, 10).split(" ");
+            if (String(day) === toDayInfo[1] && thisMonth) {
+              showData = month[rowIdx][colIdx];
+              return showData;
+            }
+            return null;
+          }
+        )
+      );
+    }
+    isAug ? pickUp(toDos.august) : pickUp(toDos.september);
+    return showData;
+  };
+
   return (
     <Section>
       <Contents>
@@ -44,13 +77,13 @@ function SectionL() {
         <Weather />
         <TodayTodo>
           <ToDoSelect>
-            <StateBtn>todo</StateBtn>
-            <StateBtn>doing</StateBtn>
-            <StateBtn>done</StateBtn>
+            <StateBtn onClick={() => onClickBtn("toDo")}>Todo</StateBtn>
+            <StateBtn onClick={() => onClickBtn("doing")}>Doing</StateBtn>
+            <StateBtn onClick={() => onClickBtn("done")}>Done</StateBtn>
           </ToDoSelect>
           <List>
-            {[1, 2, 3, 4, 5, 6].map((v, idx) => (
-              <Item key={idx}>오늘 할일111111111111111111</Item>
+            {findTodayTodo()[btn].map((v: any, idx: any) => (
+              <Item key={idx}>{"• " + v}</Item>
             ))}
           </List>
         </TodayTodo>

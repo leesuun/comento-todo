@@ -96,18 +96,20 @@ function TodoForm({
       selectTodoList.doing = month[rowIdx][colIdx].doing;
       selectTodoList.done = month[rowIdx][colIdx].done;
     };
+
     switch (month) {
-      case "july": {
-        pushData(toDos.july);
+      case "Aug": {
+        pushData(toDos.august);
         break;
       }
-      case "august": {
-        pushData(toDos.august);
+      case "Sep": {
+        pushData(toDos.september);
         break;
       }
       default:
         break;
     }
+
     return selectTodoList;
   };
 
@@ -115,8 +117,8 @@ function TodoForm({
     return Object.keys(findSelectTodo()).map((toDo) => (
       <TodoList key={toDo}>
         <ToDoTitle>{toDo[0].toUpperCase() + toDo.slice(1)}</ToDoTitle>
-        {findSelectTodo()[toDo].map((text: string) => (
-          <TodoItem key={text}>{"• " + text}</TodoItem>
+        {findSelectTodo()[toDo].map((text: string, idx: number) => (
+          <TodoItem key={idx + text}>{"• " + text}</TodoItem>
         ))}
       </TodoList>
     ));
@@ -130,16 +132,16 @@ function TodoForm({
     setToDo((prev) => {
       if (rowIdx === undefined) return prev;
 
-      if (month === "july") {
-        const copyJuly = JSON.parse(JSON.stringify(prev.july));
-        copyJuly[rowIdx][colIdx].toDo.push(addToDo);
-        return { august: prev.august, july: copyJuly };
-      }
-
-      if (month === "august") {
+      if (month === "Aug") {
         const copyAugust = JSON.parse(JSON.stringify(prev.august));
         copyAugust[rowIdx][colIdx].toDo.push(addToDo);
-        return { august: copyAugust, july: prev.july };
+        return { september: prev.september, august: copyAugust };
+      }
+
+      if (month === "Sep") {
+        const copySeptember = JSON.parse(JSON.stringify(prev.september));
+        copySeptember[rowIdx][colIdx].toDo.push(addToDo);
+        return { september: copySeptember, august: prev.august };
       }
 
       return prev;
@@ -164,7 +166,7 @@ function TodoForm({
             onInput={onInput}
           />
           <Contents>
-            {month === "july" ? showTodoList() : showTodoList()}
+            {month === "august" ? showTodoList() : showTodoList()}
           </Contents>
         </Form>
       ) : null}

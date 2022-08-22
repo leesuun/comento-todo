@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { nowMonthAtom } from "../atom";
-import { Calender } from "../utils/calender";
+import { Calender, ICalenderProps } from "../utils/calender";
 import TodoForm from "./TodoForm";
 
 const Section = styled.section`
@@ -82,7 +82,7 @@ const Week = ["MON", "TUE", "WED", "THU", "FRI", "SUN", "SAT"];
 function SectionR() {
   const [dayLocation, setDayLocation] = useState<ILocationProps>();
   const [showForm, setShowForm] = useState(false);
-  const [isJuly, setIsJuly] = useRecoilState(nowMonthAtom);
+  const [isAug, setIsAug] = useRecoilState(nowMonthAtom);
 
   const onClick = (rowIdx: number, colIdx: number, month: string) => {
     setDayLocation(() => {
@@ -91,11 +91,11 @@ function SectionR() {
     setShowForm((prev) => !prev);
   };
 
-  const onChangeMonth = () => setIsJuly((prev) => !prev);
+  const onChangeMonth = () => setIsAug((prev) => !prev);
 
-  const createDay = (month: any) => {
-    return month.map((rowData: any, rowIdx: number) =>
-      rowData.map((colData: any, colIdx: number) => (
+  const createDay = (month: ICalenderProps[][]) => {
+    return month.map((rowData, rowIdx) =>
+      rowData.map((colData, colIdx) => (
         <Day
           isHoliday={colData.isHoliday}
           thisMonth={colData.thisMonth}
@@ -112,13 +112,13 @@ function SectionR() {
     <Section>
       <Contents>
         <Date>
-          <h2>{isJuly ? "July" : "August"} 2022</h2>
-          {!isJuly ? (
+          <h2>{isAug ? "August" : "September"} 2022</h2>
+          {!isAug ? (
             <MonthChangeBtn onClick={onChangeMonth}>
               <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
             </MonthChangeBtn>
           ) : null}
-          {!isJuly ? null : (
+          {!isAug ? null : (
             <MonthChangeBtn onClick={onChangeMonth}>
               <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
             </MonthChangeBtn>
@@ -131,10 +131,10 @@ function SectionR() {
         </WeekList>
         <hr style={{ width: "100%" }} />
         <Days>
-          {isJuly ? (
-            <>{createDay(Calender.july)}</>
-          ) : (
+          {isAug ? (
             <>{createDay(Calender.august)}</>
+          ) : (
+            <>{createDay(Calender.september)}</>
           )}
         </Days>
         <TodoForm
