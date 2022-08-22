@@ -40,7 +40,7 @@ const Item = styled.li``;
 
 function SectionL() {
   const toDos = useRecoilValue(toDoAtom);
-  console.log(toDos);
+
   return (
     <Section>
       <Contents>

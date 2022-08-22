@@ -87,7 +87,6 @@ function TodoForm({
 }: IToDoFormProps) {
   const [toDos, setToDo] = useRecoilState(toDoAtom);
   const [addToDo, setAddToDo] = useState("");
-  console.log(toDos);
 
   const findSelectTodo = () => {
     const selectTodoList: any = {};
@@ -98,12 +97,12 @@ function TodoForm({
       selectTodoList.done = month[rowIdx][colIdx].done;
     };
     switch (month) {
-      case "july": {
-        pushData(toDos.july);
-        break;
-      }
       case "august": {
         pushData(toDos.august);
+        break;
+      }
+      case "september": {
+        pushData(toDos.september);
         break;
       }
       default:
@@ -132,16 +131,16 @@ function TodoForm({
     setToDo((prev) => {
       if (rowIdx === undefined) return prev;
 
-      if (month === "july") {
-        const copyJuly = JSON.parse(JSON.stringify(prev.july));
-        copyJuly[rowIdx][colIdx].toDo.push(addToDo);
-        return { august: prev.august, july: copyJuly };
-      }
-
       if (month === "august") {
         const copyAugust = JSON.parse(JSON.stringify(prev.august));
         copyAugust[rowIdx][colIdx].toDo.push(addToDo);
-        return { august: copyAugust, july: prev.july };
+        return { september: prev.september, august: copyAugust };
+      }
+
+      if (month === "september") {
+        const copySeptember = JSON.parse(JSON.stringify(prev.september));
+        copySeptember[rowIdx][colIdx].toDo.push(addToDo);
+        return { september: copySeptember, august: prev.august };
       }
 
       return prev;
@@ -166,7 +165,7 @@ function TodoForm({
             onInput={onInput}
           />
           <Contents>
-            {month === "july" ? showTodoList() : showTodoList()}
+            {month === "august" ? showTodoList() : showTodoList()}
           </Contents>
         </Form>
       ) : null}

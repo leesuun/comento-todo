@@ -27,17 +27,6 @@ export const nowMonthAtom = atom({
 export const toDoAtom = atom({
   key: "toDo",
   default: {
-    july: [...Array(6)].map((_, rowIdx) =>
-      [...Array(7)].map((_, colIdx) => {
-        return {
-          ...toDoObj,
-          calenderInfo: {
-            day: Calender.july[rowIdx][colIdx].day,
-            thisMonth: Calender.july[rowIdx][colIdx].thisMonth,
-          },
-        };
-      })
-    ),
     august: [...Array(6)].map((_, rowIdx) =>
       [...Array(7)].map((_, colIdx) => {
         return {
@@ -45,6 +34,17 @@ export const toDoAtom = atom({
           calenderInfo: {
             day: Calender.august[rowIdx][colIdx].day,
             thisMonth: Calender.august[rowIdx][colIdx].thisMonth,
+          },
+        };
+      })
+    ),
+    september: [...Array(6)].map((_, rowIdx) =>
+      [...Array(7)].map((_, colIdx) => {
+        return {
+          ...toDoObj,
+          calenderInfo: {
+            day: Calender.september[rowIdx][colIdx].day,
+            thisMonth: Calender.september[rowIdx][colIdx].thisMonth,
           },
         };
       })
