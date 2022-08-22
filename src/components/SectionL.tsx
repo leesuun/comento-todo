@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
 import { IToDo, nowMonthAtom, toDoAtom, toDoObj } from "../atom";
 import AddFeatures from "./AddFeatures";
 import Weather from "./Weather";
@@ -30,6 +31,8 @@ const StateBtn = styled.button`
   border-radius: 10px;
   background-color: black;
   color: white;
+  cursor: pointer;
+  position: relative;
 `;
 const List = styled.ul`
   display: flex;
@@ -38,6 +41,18 @@ const List = styled.ul`
   margin-top: 34px;
 `;
 const Item = styled.li``;
+
+const UnderLine = styled(motion.span)`
+  width: 35px;
+  height: 1px;
+  border-radius: 5px;
+  background-color: red;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+`;
 
 function SectionL() {
   const toDos = useRecoilValue(toDoAtom);
@@ -77,13 +92,18 @@ function SectionL() {
         <Weather />
         <TodayTodo>
           <ToDoSelect>
-            <StateBtn onClick={() => onClickBtn("toDo")}>Todo</StateBtn>
-            <StateBtn onClick={() => onClickBtn("doing")}>Doing</StateBtn>
-            <StateBtn onClick={() => onClickBtn("done")}>Done</StateBtn>
+            <AnimatePresence>
+              {["toDo", "doing", "done"].map((category) => (
+                <StateBtn key={category} onClick={() => onClickBtn(category)}>
+                  <span>{category[0].toUpperCase() + category.slice(1)}</span>
+                  {btn === category && <UnderLine layoutId="line" />}
+                </StateBtn>
+              ))}
+            </AnimatePresence>
           </ToDoSelect>
           <List>
-            {findTodayTodo()[btn].map((v: any, idx: any) => (
-              <Item key={idx}>{"• " + v}</Item>
+            {findTodayTodo()[btn].map((text: string, idx: number) => (
+              <Item key={idx + text}>{"• " + text}</Item>
             ))}
           </List>
         </TodayTodo>
