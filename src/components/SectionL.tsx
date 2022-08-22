@@ -93,23 +93,17 @@ function SectionL() {
         <TodayTodo>
           <ToDoSelect>
             <AnimatePresence>
-              <StateBtn onClick={() => onClickBtn("toDo")}>
-                <span>Todo</span>
-                {btn === "toDo" && <UnderLine layoutId="line" />}
-              </StateBtn>
-              <StateBtn onClick={() => onClickBtn("doing")}>
-                <span>Doing</span>
-                {btn === "doing" && <UnderLine layoutId="line" />}
-              </StateBtn>
-              <StateBtn onClick={() => onClickBtn("done")}>
-                <span>Done</span>
-                {btn === "done" && <UnderLine layoutId="line" />}
-              </StateBtn>
+              {["toDo", "doing", "done"].map((category) => (
+                <StateBtn key={category} onClick={() => onClickBtn(category)}>
+                  <span>{category[0].toUpperCase() + category.slice(1)}</span>
+                  {btn === category && <UnderLine layoutId="line" />}
+                </StateBtn>
+              ))}
             </AnimatePresence>
           </ToDoSelect>
           <List>
-            {findTodayTodo()[btn].map((v: any, idx: any) => (
-              <Item key={idx}>{"• " + v}</Item>
+            {findTodayTodo()[btn].map((text: string, idx: number) => (
+              <Item key={idx + text}>{"• " + text}</Item>
             ))}
           </List>
         </TodayTodo>
