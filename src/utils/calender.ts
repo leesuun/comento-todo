@@ -1,3 +1,12 @@
+export interface ICalenderDataTypes {
+  calender: {
+    month: string;
+    isHoliday: boolean;
+    day: number;
+    thisMonth: boolean;
+  }[][];
+}
+
 export const Calender = {
   july: [
     [

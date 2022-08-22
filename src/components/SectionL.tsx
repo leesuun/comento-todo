@@ -1,4 +1,6 @@
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { toDoAtom } from "../atom";
 import AddFeatures from "./AddFeatures";
 import Weather from "./Weather";
 
@@ -37,6 +39,8 @@ const List = styled.ul`
 const Item = styled.li``;
 
 function SectionL() {
+  const toDos = useRecoilValue(toDoAtom);
+  console.log(toDos);
   return (
     <Section>
       <Contents>

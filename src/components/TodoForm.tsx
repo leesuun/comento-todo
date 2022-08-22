@@ -87,6 +87,7 @@ function TodoForm({
 }: IToDoFormProps) {
   const [toDos, setToDo] = useRecoilState(toDoAtom);
   const [addToDo, setAddToDo] = useState("");
+  console.log(toDos);
 
   const findSelectTodo = () => {
     const selectTodoList: any = {};
@@ -108,6 +109,7 @@ function TodoForm({
       default:
         break;
     }
+
     return selectTodoList;
   };
 
