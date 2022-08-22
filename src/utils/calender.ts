@@ -1,3 +1,10 @@
+export interface ICalenderProps {
+  month: string;
+  isHoliday: boolean;
+  day: number;
+  thisMonth: boolean;
+}
+
 export const Calender = {
   august: [
     [

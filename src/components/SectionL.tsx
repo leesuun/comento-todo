@@ -42,22 +42,29 @@ function SectionL() {
   const toDos = useRecoilValue(toDoAtom);
   const isAug = useRecoilState(nowMonthAtom);
 
-  function findTodayTodo() {
+  const findTodayTodo = () => {
     let showData: IToDo = { calenderInfo: {}, toDo: [], doing: [], done: [] };
-    if (isAug) {
-      toDos.august.map((row, rowIdx) =>
-        row.map((col, colIdx) => {
-          const { day, thisMonth } = col.calenderInfo;
-          const toDayInfo = new Date().toDateString().slice(4, 10).split(" ");
-          if (String(day) === toDayInfo[1] && thisMonth) {
-            showData = toDos.august[rowIdx][colIdx];
-            return;
+    function pickUp(month: IToDo[][]) {
+      month.map((row: any, rowIdx: number) =>
+        row.map(
+          (
+            col: { calenderInfo: { day: number; thisMonth: boolean } },
+            colIdx: number
+          ) => {
+            const { day, thisMonth } = col.calenderInfo;
+            const toDayInfo = new Date().toDateString().slice(4, 10).split(" ");
+            if (String(day) === toDayInfo[1] && thisMonth) {
+              showData = month[rowIdx][colIdx];
+              return showData;
+            }
+            return null;
           }
-        })
+        )
       );
     }
+    isAug ? pickUp(toDos.august) : pickUp(toDos.september);
     return showData;
-  }
+  };
 
   return (
     <Section>

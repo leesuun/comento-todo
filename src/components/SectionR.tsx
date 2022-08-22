@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { nowMonthAtom } from "../atom";
-import { Calender } from "../utils/calender";
+import { Calender, ICalenderProps } from "../utils/calender";
 import TodoForm from "./TodoForm";
 
 const Section = styled.section`
@@ -93,9 +93,9 @@ function SectionR() {
 
   const onChangeMonth = () => setIsAug((prev) => !prev);
 
-  const createDay = (month: any) => {
-    return month.map((rowData: any, rowIdx: number) =>
-      rowData.map((colData: any, colIdx: number) => (
+  const createDay = (month: ICalenderProps[][]) => {
+    return month.map((rowData, rowIdx) =>
+      rowData.map((colData, colIdx) => (
         <Day
           isHoliday={colData.isHoliday}
           thisMonth={colData.thisMonth}
