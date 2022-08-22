@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { IToDo, nowMonthAtom, toDoAtom } from "../atom";
+import { IToDo, nowMonthAtom, toDoAtom, toDoObj } from "../atom";
 import AddFeatures from "./AddFeatures";
 import Weather from "./Weather";
 
@@ -41,9 +42,12 @@ const Item = styled.li``;
 function SectionL() {
   const toDos = useRecoilValue(toDoAtom);
   const isAug = useRecoilState(nowMonthAtom);
+  const [btn, setButton] = useState("toDo" || "doing" || "done");
+
+  const onClickBtn = (state: string) => setButton(state);
 
   const findTodayTodo = () => {
-    let showData: IToDo = { calenderInfo: {}, toDo: [], doing: [], done: [] };
+    let showData: any = toDoObj;
     function pickUp(month: IToDo[][]) {
       month.map((row: any, rowIdx: number) =>
         row.map(
@@ -73,13 +77,13 @@ function SectionL() {
         <Weather />
         <TodayTodo>
           <ToDoSelect>
-            <StateBtn>todo</StateBtn>
-            <StateBtn>doing</StateBtn>
-            <StateBtn>done</StateBtn>
+            <StateBtn onClick={() => onClickBtn("toDo")}>Todo</StateBtn>
+            <StateBtn onClick={() => onClickBtn("doing")}>Doing</StateBtn>
+            <StateBtn onClick={() => onClickBtn("done")}>Done</StateBtn>
           </ToDoSelect>
           <List>
-            {findTodayTodo()["toDo"].map((v, idx) => (
-              <Item key={idx}>{v}</Item>
+            {findTodayTodo()[btn].map((v: any, idx: any) => (
+              <Item key={idx}>{"• " + v}</Item>
             ))}
           </List>
         </TodayTodo>

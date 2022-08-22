@@ -7,10 +7,11 @@ export interface IToDo {
   done: string[];
   calenderInfo: {};
 }
-const toDoObj: IToDo = {
+
+export const toDoObj: IToDo = {
   toDo: [],
-  doing: [],
-  done: [],
+  doing: ["doing", "doing", "doing", "doing", "doing"],
+  done: ["done", "done", "done", "done"],
   calenderInfo: {},
 };
 

@@ -117,8 +117,8 @@ function TodoForm({
     return Object.keys(findSelectTodo()).map((toDo) => (
       <TodoList key={toDo}>
         <ToDoTitle>{toDo[0].toUpperCase() + toDo.slice(1)}</ToDoTitle>
-        {findSelectTodo()[toDo].map((text: string) => (
-          <TodoItem key={text}>{"• " + text}</TodoItem>
+        {findSelectTodo()[toDo].map((text: string, idx: number) => (
+          <TodoItem key={idx + text}>{"• " + text}</TodoItem>
         ))}
       </TodoList>
     ));
