@@ -1,10 +1,10 @@
+import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import Clock from "react-live-clock";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
-import { useRecoilState } from "recoil";
-import { themeAtom } from "../atom";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { IToDo, nowMonthAtom, toDoAtom, toDoObj } from "../atom";
+import AddFeatures from "./AddFeatures";
+import Weather from "./Weather";
 
 const Section = styled.section`
   padding: 10px;
@@ -16,32 +16,6 @@ const Contents = styled.div`
   align-items: center;
   gap: 100px;
 `;
-const AddFeatures = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-`;
-const Time = styled.time`
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const Weather = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  flex-direction: column;
-`;
-const WeatherImg = styled.img<{ src: string }>`
-  background-image: url(src);
-`;
-const Temp = styled.strong`
-  font-size: 25px;
-  font-weight: bold;
-`;
-const WeatherState = styled.small``;
 
 const TodayTodo = styled.div`
   width: 100%;
@@ -57,6 +31,8 @@ const StateBtn = styled.button`
   border-radius: 10px;
   background-color: black;
   color: white;
+  cursor: pointer;
+  position: relative;
 `;
 const List = styled.ul`
   display: flex;
@@ -66,70 +42,68 @@ const List = styled.ul`
 `;
 const Item = styled.li``;
 
-interface IWeatherProps {
-  weather: [{ description: string; icon: string }];
-  main: { temp: number };
-  name: string;
-}
+const UnderLine = styled(motion.span)`
+  width: 35px;
+  height: 1px;
+  border-radius: 5px;
+  background-color: red;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+`;
 
 function SectionL() {
-  const [isDark, setIsDark] = useRecoilState(themeAtom);
-  const onDarkMode = () => setIsDark((prev) => !prev);
-  const [weather, setWeather] = useState<IWeatherProps>();
+  const toDos = useRecoilValue(toDoAtom);
+  const isAug = useRecoilState(nowMonthAtom);
+  const [btn, setButton] = useState("toDo" || "doing" || "done");
 
-  useEffect(() => {
-    const API_KEY = "b49d199d78db4d81dcf44e33698ac973";
+  const onClickBtn = (state: string) => setButton(state);
 
-    function getGeoInfoSuccess(position: GeolocationPosition) {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
-      fetch(url)
-        .then((response) => response.json())
-        .then((data) => setWeather(data));
+  const findTodayTodo = () => {
+    let showData: any = toDoObj;
+    function pickUp(month: IToDo[][]) {
+      month.map((row: any, rowIdx: number) =>
+        row.map(
+          (
+            col: { calenderInfo: { day: number; thisMonth: boolean } },
+            colIdx: number
+          ) => {
+            const { day, thisMonth } = col.calenderInfo;
+            const toDayInfo = new Date().toDateString().slice(4, 10).split(" ");
+            if (String(day) === toDayInfo[1] && thisMonth) {
+              showData = month[rowIdx][colIdx];
+              return showData;
+            }
+            return null;
+          }
+        )
+      );
     }
-
-    function getGeoInfoFail() {
-      alert("Cannot get the weather..!!");
-    }
-
-    navigator.geolocation.getCurrentPosition(getGeoInfoSuccess, getGeoInfoFail);
-  }, []);
+    isAug ? pickUp(toDos.august) : pickUp(toDos.september);
+    return showData;
+  };
 
   return (
     <Section>
       <Contents>
-        <AddFeatures>
-          <Time>
-            <Clock format={"HH:mm:ss"} ticking={true} />
-          </Time>
-          <FontAwesomeIcon
-            onClick={onDarkMode}
-            icon={isDark ? faSun : faMoon}
-            style={{
-              fontSize: "40px",
-              color: isDark ? "yellow" : "black",
-              cursor: "pointer",
-            }}
-          ></FontAwesomeIcon>
-        </AddFeatures>
-        <Weather>
-          <WeatherImg
-            src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
-          />
-
-          <Temp>{weather?.main.temp.toFixed(1) + "℃"}</Temp>
-          <WeatherState>{weather?.weather[0].description}</WeatherState>
-        </Weather>
+        <AddFeatures />
+        <Weather />
         <TodayTodo>
           <ToDoSelect>
-            <StateBtn>todo</StateBtn>
-            <StateBtn>doing</StateBtn>
-            <StateBtn>done</StateBtn>
+            <AnimatePresence>
+              {["toDo", "doing", "done"].map((category) => (
+                <StateBtn key={category} onClick={() => onClickBtn(category)}>
+                  <span>{category[0].toUpperCase() + category.slice(1)}</span>
+                  {btn === category && <UnderLine layoutId="line" />}
+                </StateBtn>
+              ))}
+            </AnimatePresence>
           </ToDoSelect>
           <List>
-            {[1, 2, 3, 4, 5, 6].map((v, idx) => (
-              <Item key={idx}>오늘 할일111111111111111111</Item>
+            {findTodayTodo()[btn].map((text: string, idx: number) => (
+              <Item key={idx + text}>{"• " + text}</Item>
             ))}
           </List>
         </TodayTodo>

@@ -1,14 +1,18 @@
 import { atom } from "recoil";
+import { Calender } from "./utils/calender";
 
-interface IToDo {
+export interface IToDo {
   toDo: string[];
   doing: string[];
   done: string[];
+  calenderInfo: {};
 }
-const toDoObj: IToDo = {
+
+export const toDoObj: IToDo = {
   toDo: [],
-  doing: [],
-  done: [],
+  doing: ["doing", "doing", "doing", "doing", "doing"],
+  done: ["done", "done", "done", "done"],
+  calenderInfo: {},
 };
 
 export const themeAtom = atom<Boolean>({
@@ -24,7 +28,27 @@ export const nowMonthAtom = atom({
 export const toDoAtom = atom({
   key: "toDo",
   default: {
-    july: [...Array(7)].map((_) => [...Array(6)].map((_) => toDoObj)),
-    august: [...Array(7)].map((_) => [...Array(6)].map((_) => toDoObj)),
+    august: [...Array(6)].map((_, rowIdx) =>
+      [...Array(7)].map((_, colIdx) => {
+        return {
+          ...toDoObj,
+          calenderInfo: {
+            day: Calender.august[rowIdx][colIdx].day,
+            thisMonth: Calender.august[rowIdx][colIdx].thisMonth,
+          },
+        };
+      })
+    ),
+    september: [...Array(6)].map((_, rowIdx) =>
+      [...Array(7)].map((_, colIdx) => {
+        return {
+          ...toDoObj,
+          calenderInfo: {
+            day: Calender.september[rowIdx][colIdx].day,
+            thisMonth: Calender.september[rowIdx][colIdx].thisMonth,
+          },
+        };
+      })
+    ),
   },
 });
