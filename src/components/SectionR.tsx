@@ -44,7 +44,7 @@ const MonthChangeBtn = styled.button`
 
 const WeekList = styled.ul`
   display: flex;
-  gap: 44px;
+  gap: 43px;
   font-size: 20px;
   font-weight: bold;
   color: #2fe78e;
