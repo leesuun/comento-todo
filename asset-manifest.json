@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/comento-todo/static/js/main.9ee83d95.js",
+    "index.html": "/comento-todo/index.html",
+    "main.9ee83d95.js.map": "/comento-todo/static/js/main.9ee83d95.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.9ee83d95.js"
+  ]
+}
